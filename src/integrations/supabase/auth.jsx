@@ -23,16 +23,16 @@ export const SupabaseAuthProvider = ({ children }) => {
 
     getSession();
 
-    const logout = async () => {
-        await supabase.auth.signOut();
-        setSession(null);
-        queryClient.invalidateQueries('user');
-    };
-
     return () => {
       authListener.subscription.unsubscribe();
     };
   }, [queryClient]);
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    setSession(null);
+    queryClient.invalidateQueries('user');
+  };
 
   return (
     <SupabaseProvider>
@@ -40,7 +40,6 @@ export const SupabaseAuthProvider = ({ children }) => {
         {children}
         </SupabaseAuthContext.Provider>
     </SupabaseProvider>
-  );
 };
 
 export const useSupabaseAuth = () => {
