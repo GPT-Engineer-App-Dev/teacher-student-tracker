@@ -23,16 +23,16 @@ export const SupabaseAuthProvider = ({ children }) => {
 
     getSession();
 
-    const logout = async () => {
-        await supabase.auth.signOut();
-        setSession(null);
-        queryClient.invalidateQueries('user');
-    };
-
     return () => {
       authListener.subscription.unsubscribe();
     };
   }, [queryClient]);
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    setSession(null);
+    queryClient.invalidateQueries('user');
+  };
 
   return (
     <SupabaseProvider>
@@ -54,16 +54,3 @@ export const SupabaseAuthUI = () => (
     theme="dark"
   />
 );
-
-/* example usage
-
-// assumed MyComponent is used within SupabaseAuthProvider
-import { useSupabaseAuth, SupabaseAuthUI } from './path/to/integrations/supabase/auth.jsx';
-const MyComponent = () => {
-  const {session, logout} = useSupabaseAuth();
-  const [showLogin, setShowLogin] = useState(false);
-  if (!session) return (showLogin?<SupabaseAuthUI />:<button onClick={() => setShowLogin(true)}>Login</button>);
-  return (<button onClick={() => {setShowLogin(false); logout()}}>Logout {session.user.email}</button>);
-};
-
-*/
